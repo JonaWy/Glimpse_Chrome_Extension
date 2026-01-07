@@ -1,0 +1,53 @@
+{
+  "extension_name": {
+    "message": "Glimpse - Lese-Erweiterung",
+    "description": "Der Name der Erweiterung"
+  },
+  "extension_description": {
+    "message": "Verbessere dein Leseerlebnis mit personalisierter Lesezeitschätzung, Fokusmodus und Lesestatistiken.",
+    "description": "Die Beschreibung der Erweiterung"
+  },
+  "reading_time": {
+    "message": "$TIME$ Min. Lesezeit",
+    "description": "Lesezeit-Anzeige",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "reading_time_short": {
+    "message": "$TIME$ Min.",
+    "description": "Kurze Lesezeit-Anzeige",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "words": {
+    "message": "$COUNT$ Wörter",
+    "description": "Wortanzahl-Anzeige",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "1500"
+      }
+    }
+  },
+  "calibrate": {
+    "message": "Lesegeschwindigkeit kalibrieren",
+    "description": "Button zum Starten der Kalibrierung"
+  },
+  "settings": {
+    "message": "Einstellungen",
+    "description": "Einstellungen Button-Text"
+  },
+  "statistics": {
+    "message": "Statistiken",
+    "description": "Statistiken Abschnittstitel"
+  }
+}
+

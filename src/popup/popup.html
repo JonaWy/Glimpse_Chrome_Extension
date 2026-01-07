@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glimpse - Reading Enhancement</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="popup-logo">
+        <div class="popup-logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </div>
+        <h1 class="popup-title">Glimpse</h1>
+      </div>
+      <div class="popup-header-actions">
+        <button class="btn btn-icon btn-ghost" id="theme-toggle-btn" aria-label="Toggle theme">
+          <!-- Sun icon (shown in dark mode) -->
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <!-- Moon icon (shown in light mode) -->
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+        <button class="btn btn-icon btn-ghost" id="settings-btn" aria-label="Settings">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="popup-content">
+      <!-- Current Page Reading Time -->
+      <section class="popup-section current-page-card animate-slide-up" id="current-page-section">
+        <div class="current-page-info" id="current-page-info">
+          <div class="current-page-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div class="current-page-details">
+            <div class="current-page-label">Current Page</div>
+            <div class="current-page-time" id="current-time">--</div>
+            <div class="current-page-words" id="current-words">Loading...</div>
+          </div>
+        </div>
+        <div class="current-page-empty" id="current-page-empty" style="display: none;">
+          <div class="current-page-empty-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <p>No article detected on this page</p>
+        </div>
+      </section>
+
+      <!-- Reading Speed -->
+      <section class="popup-section animate-slide-up" style="animation-delay: 0.05s;">
+        <div class="section-header">
+          <h2 class="section-title">Your Reading Speed</h2>
+        </div>
+        <div class="reading-speed-display">
+          <div class="speed-value">
+            <span class="speed-number" id="wpm-value">238</span>
+            <span class="speed-unit">wpm</span>
+          </div>
+          <div class="speed-status not-calibrated" id="calibration-status">
+            <span class="speed-status-dot"></span>
+            <span id="calibration-text">Estimate</span>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-full" id="calibrate-btn" style="margin-top: 12px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          Calibrate Reading Speed
+        </button>
+      </section>
+
+      <!-- Quick Stats -->
+      <section class="popup-section animate-slide-up" style="animation-delay: 0.1s;">
+        <div class="section-header">
+          <h2 class="section-title">Today's Progress</h2>
+        </div>
+        <div class="quick-stats">
+          <div class="stat-item">
+            <div class="stat-value" id="stat-articles">0</div>
+            <div class="stat-label">Articles</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="stat-words">0</div>
+            <div class="stat-label">Words</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="stat-streak">0</div>
+            <div class="stat-label">Day Streak</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Feature Toggles -->
+      <section class="popup-section animate-slide-up" style="animation-delay: 0.15s;">
+        <div class="section-header">
+          <h2 class="section-title">Features</h2>
+        </div>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-info">
+              <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <span class="feature-name">Reading Time</span>
+            </div>
+            <div class="toggle active" id="toggle-reading-time" role="switch" aria-checked="true" tabindex="0">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-info">
+              <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M12 1v6m0 6v6"></path>
+                </svg>
+              </div>
+              <span class="feature-name">Focus Mode</span>
+            </div>
+            <div class="toggle active" id="toggle-focus" role="switch" aria-checked="true" tabindex="0">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-info">
+              <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="20" x2="12" y2="10"></line>
+                  <line x1="18" y1="20" x2="18" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="16"></line>
+                </svg>
+              </div>
+              <span class="feature-name">Progress Bar</span>
+            </div>
+            <div class="toggle active" id="toggle-progress" role="switch" aria-checked="true" tabindex="0">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="popup-footer">
+      <a href="#" class="footer-link" id="link-help">Help</a>
+      <a href="#" class="footer-link" id="link-feedback">Feedback</a>
+      <a href="#" class="footer-link" id="link-privacy">Privacy</a>
+    </footer>
+  </div>
+
+  <script src="popup.js" type="module"></script>
+</body>
+</html>

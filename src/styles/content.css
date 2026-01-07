@@ -1,0 +1,680 @@
+/**
+ * Glimpse Extension - Content Script Styles
+ * Styles injected into web pages for reading enhancement features
+ * Uses warm earth tone design system
+ */
+
+/* Scoped styles to avoid conflicts with host page */
+.glimpse-extension {
+  /* CSS Variables - Light Mode */
+  --glimpse-background: oklch(0.9911 0 0);
+  --glimpse-foreground: oklch(0.2435 0 0);
+  --glimpse-primary: oklch(0.4341 0.0392 41.9938);
+  --glimpse-primary-foreground: oklch(1.0000 0 0);
+  --glimpse-secondary: oklch(0.9200 0.0651 74.3695);
+  --glimpse-secondary-foreground: oklch(0.3499 0.0685 40.8288);
+  --glimpse-muted: oklch(0.9521 0 0);
+  --glimpse-muted-foreground: oklch(0.5032 0 0);
+  --glimpse-accent: oklch(0.9310 0 0);
+  --glimpse-border: oklch(0.8822 0 0);
+  --glimpse-ring: oklch(0.4341 0.0392 41.9938);
+  --glimpse-shadow: 0 4px 12px -2px hsl(0 0% 0% / 0.15);
+  --glimpse-shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.10), 0 4px 6px -4px hsl(0 0% 0% / 0.10);
+  --glimpse-radius: 0.5rem;
+  --glimpse-font: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --glimpse-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  font-family: var(--glimpse-font);
+  font-size: 14px;
+  line-height: 1.5;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.glimpse-extension *,
+.glimpse-extension *::before,
+.glimpse-extension *::after {
+  box-sizing: border-box;
+}
+
+/* ========================================
+   Reading Time Badge
+   ======================================== */
+
+.glimpse-reading-time-badge {
+  position: fixed;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--glimpse-background);
+  border-radius: calc(var(--glimpse-radius) + 4px);
+  box-shadow: var(--glimpse-shadow-lg);
+  border: 1px solid var(--glimpse-border);
+  opacity: 0;
+  transform: translateY(-12px);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: default;
+  user-select: none;
+}
+
+.glimpse-reading-time-badge.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.glimpse-reading-time-badge.position-top-right {
+  top: 24px;
+  right: 24px;
+}
+
+.glimpse-reading-time-badge.position-top-left {
+  top: 24px;
+  left: 24px;
+}
+
+.glimpse-reading-time-badge.position-bottom-right {
+  bottom: 24px;
+  right: 24px;
+}
+
+.glimpse-reading-time-badge.position-bottom-left {
+  bottom: 24px;
+  left: 24px;
+}
+
+/* Badge Icon */
+.glimpse-badge-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  background: var(--glimpse-primary);
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px hsl(0 0% 0% / 0.15);
+}
+
+.glimpse-badge-icon svg {
+  width: 22px;
+  height: 22px;
+  color: var(--glimpse-primary-foreground);
+}
+
+/* Badge Content */
+.glimpse-badge-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.glimpse-badge-time {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--glimpse-foreground);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-family: var(--glimpse-font-mono);
+}
+
+.glimpse-badge-words {
+  font-size: 12px;
+  color: var(--glimpse-muted-foreground);
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+/* Badge Actions */
+.glimpse-badge-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-left: 8px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.glimpse-reading-time-badge:hover .glimpse-badge-actions {
+  opacity: 1;
+}
+
+.glimpse-badge-adjust,
+.glimpse-badge-close {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glimpse-secondary);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+  padding: 0;
+}
+
+.glimpse-badge-adjust:hover,
+.glimpse-badge-close:hover {
+  transform: scale(1.15);
+  background: var(--glimpse-primary);
+  box-shadow: 0 2px 8px hsl(0 0% 0% / 0.2);
+}
+
+.glimpse-badge-adjust:hover svg,
+.glimpse-badge-close:hover svg {
+  color: var(--glimpse-primary-foreground);
+}
+
+.glimpse-badge-adjust svg,
+.glimpse-badge-close svg {
+  width: 14px;
+  height: 14px;
+  color: var(--glimpse-secondary-foreground);
+  transition: color 0.2s;
+}
+
+/* Badge Hints */
+.glimpse-badge-hint,
+.glimpse-badge-adjusted {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 12px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--glimpse-foreground);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.glimpse-badge-hint {
+  background: var(--glimpse-muted-foreground);
+  color: var(--glimpse-background);
+}
+
+.glimpse-badge-adjusted {
+  background: var(--glimpse-secondary);
+  color: var(--glimpse-secondary-foreground);
+}
+
+/* ========================================
+   Speed Adjustment Menu
+   ======================================== */
+
+.glimpse-speed-menu {
+  position: fixed;
+  z-index: 2147483648;
+  top: 88px;
+  right: 24px;
+  width: 300px;
+  background: var(--glimpse-background);
+  border-radius: calc(var(--glimpse-radius) + 6px);
+  box-shadow: 0 12px 28px -4px hsl(0 0% 0% / 0.25);
+  border: 1px solid var(--glimpse-border);
+  opacity: 0;
+  transform: translateY(-12px) scale(0.95);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.glimpse-speed-menu.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.glimpse-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--glimpse-border);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--glimpse-foreground);
+}
+
+.glimpse-menu-close {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--glimpse-muted-foreground);
+  transition: background 0.2s, color 0.2s;
+}
+
+.glimpse-menu-close:hover {
+  background: var(--glimpse-muted);
+  color: var(--glimpse-foreground);
+}
+
+.glimpse-menu-content {
+  padding: 20px;
+}
+
+.glimpse-speed-display {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.glimpse-speed-value {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--glimpse-primary);
+  line-height: 1;
+  font-family: var(--glimpse-font-mono);
+  letter-spacing: -0.02em;
+}
+
+.glimpse-speed-unit {
+  font-size: 15px;
+  color: var(--glimpse-muted-foreground);
+  margin-left: 6px;
+  font-weight: 500;
+}
+
+.glimpse-speed-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.glimpse-speed-btn {
+  width: 44px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glimpse-secondary);
+  border: none;
+  border-radius: var(--glimpse-radius);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--glimpse-secondary-foreground);
+  transition: all 0.2s;
+}
+
+.glimpse-speed-btn:hover {
+  background: var(--glimpse-primary);
+  color: var(--glimpse-primary-foreground);
+  transform: translateY(-1px);
+}
+
+.glimpse-speed-slider {
+  flex: 1;
+  height: 8px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--glimpse-border);
+  border-radius: 4px;
+  outline: none;
+}
+
+.glimpse-speed-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--glimpse-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 6px hsl(0 0% 0% / 0.2);
+}
+
+.glimpse-speed-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px hsl(0 0% 0% / 0.25);
+}
+
+.glimpse-speed-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: var(--glimpse-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.glimpse-speed-adjustment {
+  text-align: center;
+  font-size: 13px;
+  color: var(--glimpse-muted-foreground);
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+
+.glimpse-adjustment-value {
+  font-weight: 700;
+  color: var(--glimpse-foreground);
+  font-family: var(--glimpse-font-mono);
+}
+
+.glimpse-menu-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.glimpse-save-btn,
+.glimpse-reset-btn {
+  flex: 1;
+  padding: 12px 14px;
+  border: none;
+  border-radius: var(--glimpse-radius);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.glimpse-save-btn {
+  background: var(--glimpse-primary);
+  color: var(--glimpse-primary-foreground);
+}
+
+.glimpse-save-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px hsl(0 0% 0% / 0.2);
+}
+
+.glimpse-reset-btn {
+  background: var(--glimpse-muted);
+  color: var(--glimpse-foreground);
+  border: 1px solid var(--glimpse-border);
+}
+
+.glimpse-reset-btn:hover {
+  background: var(--glimpse-secondary);
+  border-color: var(--glimpse-secondary);
+}
+
+/* ========================================
+   Dark Mode Support
+   ======================================== */
+
+/* Dark mode via manual class */
+.glimpse-extension.glimpse-theme-dark {
+  --glimpse-background: oklch(0.2134 0 0);
+  --glimpse-foreground: oklch(0.9491 0 0);
+  --glimpse-primary: oklch(0.9247 0.0524 66.1732);
+  --glimpse-primary-foreground: oklch(0.2029 0.0240 200.1962);
+  --glimpse-secondary: oklch(0.3163 0.0190 63.6992);
+  --glimpse-secondary-foreground: oklch(0.9247 0.0524 66.1732);
+  --glimpse-muted: oklch(0.2520 0 0);
+  --glimpse-muted-foreground: oklch(0.7699 0 0);
+  --glimpse-accent: oklch(0.2850 0 0);
+  --glimpse-border: oklch(0.2351 0.0115 91.7467);
+  --glimpse-ring: oklch(0.9247 0.0524 66.1732);
+  --glimpse-shadow: 0 4px 12px -2px hsl(0 0% 0% / 0.4);
+  --glimpse-shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.4), 0 4px 6px -4px hsl(0 0% 0% / 0.4);
+}
+
+.glimpse-extension.glimpse-theme-dark .glimpse-badge-hint {
+  background: oklch(0.5 0 0);
+  color: oklch(0.9491 0 0);
+}
+
+/* Light mode is default, but explicit class for consistency */
+.glimpse-extension.glimpse-theme-light {
+  --glimpse-background: oklch(0.9911 0 0);
+  --glimpse-foreground: oklch(0.2435 0 0);
+  --glimpse-primary: oklch(0.4341 0.0392 41.9938);
+  --glimpse-primary-foreground: oklch(1.0000 0 0);
+  --glimpse-secondary: oklch(0.9200 0.0651 74.3695);
+  --glimpse-secondary-foreground: oklch(0.3499 0.0685 40.8288);
+  --glimpse-muted: oklch(0.9521 0 0);
+  --glimpse-muted-foreground: oklch(0.5032 0 0);
+  --glimpse-accent: oklch(0.9310 0 0);
+  --glimpse-border: oklch(0.8822 0 0);
+  --glimpse-ring: oklch(0.4341 0.0392 41.9938);
+  --glimpse-shadow: 0 4px 12px -2px hsl(0 0% 0% / 0.15);
+  --glimpse-shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.10), 0 4px 6px -4px hsl(0 0% 0% / 0.10);
+}
+
+/* ========================================
+   Focus Highlighter
+   ======================================== */
+
+/* Selectable paragraphs - subtle border on hover */
+.glimpse-paragraph-selectable {
+  cursor: pointer;
+  transition: box-shadow 0.25s ease;
+  border-radius: 6px;
+  margin-left: -10px;
+  margin-right: -10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.glimpse-paragraph-selectable:hover {
+  box-shadow: 0 0 0 2px oklch(0.9200 0.0651 74.3695);
+}
+
+/* Dark mode paragraph hover - using body class check */
+body:has(.glimpse-extension.glimpse-theme-dark) .glimpse-paragraph-selectable:hover {
+  box-shadow: 0 0 0 2px oklch(0.3163 0.0190 63.6992);
+}
+
+/* Selected paragraph */
+.glimpse-paragraph-selected {
+  box-shadow: 0 0 0 2px oklch(0.4341 0.0392 41.9938);
+  border-radius: 6px;
+}
+
+body:has(.glimpse-extension.glimpse-theme-dark) .glimpse-paragraph-selected {
+  box-shadow: 0 0 0 2px oklch(0.9247 0.0524 66.1732);
+}
+
+/* Focused paragraph (highlighted) */
+.glimpse-paragraph-focused {
+  box-shadow: 
+    0 0 0 3px oklch(0.4341 0.0392 41.9938),
+    0 6px 24px -4px hsl(0 0% 0% / 0.15) !important;
+  border-radius: 8px;
+}
+
+body:has(.glimpse-extension.glimpse-theme-dark) .glimpse-paragraph-focused {
+  box-shadow: 
+    0 0 0 3px oklch(0.9247 0.0524 66.1732),
+    0 6px 24px -4px hsl(0 0% 0% / 0.35) !important;
+}
+
+/* Focus icon button */
+.glimpse-focus-icon {
+  position: absolute;
+  z-index: 2147483647;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glimpse-background);
+  border: 2px solid var(--glimpse-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 3px 10px hsl(0 0% 0% / 0.2);
+}
+
+.glimpse-focus-icon.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.glimpse-focus-icon:hover {
+  background: var(--glimpse-primary);
+  transform: scale(1.1);
+}
+
+.glimpse-focus-icon:hover svg {
+  color: var(--glimpse-primary-foreground);
+}
+
+.glimpse-focus-icon.active {
+  background: var(--glimpse-primary);
+  transform: scale(1);
+  animation: glimpse-pulse 1.8s ease-in-out infinite;
+}
+
+.glimpse-focus-icon.active svg {
+  color: var(--glimpse-primary-foreground);
+}
+
+.glimpse-focus-icon svg {
+  width: 18px;
+  height: 18px;
+  color: var(--glimpse-primary);
+  transition: color 0.2s;
+}
+
+/* Dimming overlay container */
+.glimpse-focus-overlay-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2147483645;
+  pointer-events: none;
+}
+
+.glimpse-focus-overlay-container.active {
+  pointer-events: auto;
+}
+
+/* Individual overlay parts */
+.glimpse-focus-overlay {
+  position: fixed;
+  background-color: hsl(0 0% 0% / 0);
+  transition: background-color 0.35s ease;
+  pointer-events: none;
+}
+
+.glimpse-focus-overlay-container.active .glimpse-focus-overlay {
+  background-color: hsl(0 0% 0% / var(--glimpse-dim-intensity, 0.7));
+  pointer-events: auto;
+}
+
+/* Keyboard hint */
+.glimpse-focus-hint {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(24px);
+  z-index: 2147483648;
+  display: flex;
+  gap: 18px;
+  padding: 12px 24px;
+  background: var(--glimpse-background);
+  border-radius: 28px;
+  box-shadow: 0 6px 20px hsl(0 0% 0% / 0.18);
+  border: 1px solid var(--glimpse-border);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--glimpse-foreground);
+  opacity: 0;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glimpse-focus-hint.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.glimpse-focus-hint span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.glimpse-focus-hint kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 8px;
+  background: var(--glimpse-muted);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--glimpse-font-mono);
+  border: 1px solid var(--glimpse-border);
+}
+
+/* ========================================
+   Progress Bar
+   ======================================== */
+
+.glimpse-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    oklch(0.4341 0.0392 41.9938),
+    oklch(0.9200 0.0651 74.3695)
+  );
+  z-index: 2147483646;
+  transition: width 0.15s ease-out;
+  box-shadow: 0 1px 4px oklch(0.4341 0.0392 41.9938 / 0.3);
+}
+
+.glimpse-progress-bar.glimpse-theme-dark {
+  background: linear-gradient(
+    90deg,
+    oklch(0.9247 0.0524 66.1732),
+    oklch(0.3163 0.0190 63.6992)
+  );
+  box-shadow: 0 1px 4px oklch(0.9247 0.0524 66.1732 / 0.3);
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+
+@keyframes glimpse-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 3px 10px hsl(0 0% 0% / 0.2); }
+  50% { transform: scale(1.05); box-shadow: 0 6px 16px hsl(0 0% 0% / 0.25); }
+}
+
+/* ========================================
+   Reduced Motion
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .glimpse-reading-time-badge,
+  .glimpse-speed-menu,
+  .glimpse-badge-adjust,
+  .glimpse-badge-close,
+  .glimpse-focus-icon,
+  .glimpse-focus-overlay,
+  .glimpse-focus-overlay-container,
+  .glimpse-focus-hint,
+  .glimpse-paragraph-selectable,
+  .glimpse-paragraph-selected,
+  .glimpse-paragraph-focused,
+  .glimpse-progress-bar {
+    transition: none;
+  }
+  
+  .glimpse-focus-icon.active {
+    animation: none;
+  }
+}

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Glimpse Icon Generator</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      padding: 40px;
+      background: #f5f5f5;
+    }
+    h1 { color: #333; }
+    .instructions {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .icons {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .icon-box {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    canvas { display: block; margin: 0 auto 10px; }
+    button {
+      background: oklch(0.8677 0.0735 7.0855);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    button:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <h1>🎨 Glimpse Icon Generator</h1>
+  
+  <div class="instructions">
+    <h2>Instructions</h2>
+    <ol>
+      <li>Open this file in a browser</li>
+      <li>Click each "Download" button to save the icons</li>
+      <li>Place the downloaded files in <code>src/icons/</code></li>
+      <li>Run <code>npm run build</code> to include them</li>
+    </ol>
+  </div>
+
+  <div class="icons" id="icons"></div>
+
+  <script>
+    const sizes = [16, 32, 48, 128];
+    const container = document.getElementById('icons');
+
+    function drawIcon(ctx, size) {
+      const scale = size / 128;
+      
+      // Background gradient (peachy pink to lavender)
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#F5A9B8'); // Primary peachy pink
+      gradient.addColorStop(1, '#A9C4F5'); // Secondary lavender
+      
+      // Rounded rectangle background
+      const radius = size * 0.15;
+      ctx.beginPath();
+      ctx.roundRect(0, 0, size, size, radius);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      
+      // Eye icon (simplified)
+      ctx.strokeStyle = '#3a3a3a';
+      ctx.lineWidth = Math.max(2, size * 0.06);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      
+      const cx = size / 2;
+      const cy = size / 2;
+      const eyeWidth = size * 0.6;
+      const eyeHeight = size * 0.3;
+      
+      // Eye shape
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, eyeWidth / 2, eyeHeight / 2, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      // Pupil
+      ctx.beginPath();
+      ctx.arc(cx, cy, size * 0.12, 0, Math.PI * 2);
+      ctx.fillStyle = '#3a3a3a';
+      ctx.fill();
+      
+      // Highlight
+      ctx.beginPath();
+      ctx.arc(cx - size * 0.04, cy - size * 0.04, size * 0.04, 0, Math.PI * 2);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+    }
+
+    sizes.forEach(size => {
+      const box = document.createElement('div');
+      box.className = 'icon-box';
+      
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      canvas.style.width = `${Math.max(size, 64)}px`;
+      canvas.style.height = `${Math.max(size, 64)}px`;
+      canvas.style.imageRendering = 'pixelated';
+      
+      const ctx = canvas.getContext('2d');
+      drawIcon(ctx, size);
+      
+      const label = document.createElement('div');
+      label.textContent = `${size}x${size}`;
+      label.style.marginBottom = '10px';
+      label.style.fontWeight = '600';
+      
+      const btn = document.createElement('button');
+      btn.textContent = 'Download';
+      btn.onclick = () => {
+        const link = document.createElement('a');
+        link.download = `icon-${size}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      };
+      
+      box.appendChild(canvas);
+      box.appendChild(label);
+      box.appendChild(btn);
+      container.appendChild(box);
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glimpse - Reading Speed Calibration</title>
+  <link rel="stylesheet" href="calibration.css">
+</head>
+<body>
+  <div class="calibration-container">
+    <!-- Header -->
+    <header class="calibration-header">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </div>
+        <h1>Glimpse</h1>
+      </div>
+      <p class="subtitle">Reading Speed Calibration</p>
+    </header>
+
+    <!-- Introduction -->
+    <section class="section intro-section" id="intro-section">
+      <div class="card">
+        <h2>📖 Personalize Your Reading Time</h2>
+        <p>
+          Everyone reads at a different pace. By calibrating your reading speed, 
+          Glimpse can give you accurate time estimates for articles.
+        </p>
+        <div class="info-box">
+          <strong>How it works:</strong>
+          <ol>
+            <li>Click "Start Calibration"</li>
+            <li>Read the sample text at your normal pace</li>
+            <li>Click "I'm Done" when finished</li>
+            <li>Your personalized reading speed will be saved</li>
+          </ol>
+        </div>
+        <button class="btn btn-primary btn-large" id="start-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          Start Calibration
+        </button>
+      </div>
+    </section>
+
+    <!-- Reading Section -->
+    <section class="section reading-section" id="reading-section" style="display: none;">
+      <div class="card reading-card">
+        <div class="reading-header">
+          <div class="timer" id="timer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span id="timer-display">0:00</span>
+          </div>
+          <div class="word-count">
+            <span id="word-count">350</span> words
+          </div>
+        </div>
+        
+        <div class="reading-content" id="reading-content">
+          <h3>The Art of Reading</h3>
+          <p>
+            Reading is one of humanity's most remarkable achievements. When we read, our brains perform 
+            an incredibly complex task: converting abstract symbols into meaning, emotion, and understanding. 
+            Unlike speaking, which develops naturally in children exposed to language, reading must be 
+            explicitly taught and practiced.
+          </p>
+          <p>
+            The history of reading spans thousands of years. Ancient civilizations developed writing systems 
+            to record important information, from tax records to epic poetry. The Sumerians created cuneiform, 
+            the Egyptians developed hieroglyphics, and the Phoenicians invented the alphabet that would 
+            eventually evolve into the letters you're reading right now.
+          </p>
+          <p>
+            Modern research has revealed fascinating insights about how we read. Our eyes don't move smoothly 
+            across text; instead, they make rapid jumps called saccades, fixating on groups of words. Skilled 
+            readers can process about 250 to 300 words per minute, though this varies significantly based on 
+            the material's complexity and the reader's familiarity with the subject.
+          </p>
+          <p>
+            Digital reading has introduced new patterns. Studies show that people often skim online content, 
+            reading in an F-shaped pattern where they scan headlines and the beginnings of paragraphs. This 
+            has implications for how we write and design content for screens. Despite these changes, the 
+            fundamental cognitive processes of reading remain the same whether we're looking at paper or pixels.
+          </p>
+          <p>
+            The benefits of regular reading extend far beyond simple entertainment. Research consistently 
+            shows that reading improves vocabulary, enhances empathy, reduces stress, and may even help 
+            prevent cognitive decline in later life. Whether you prefer fiction or non-fiction, reading 
+            remains one of the most rewarding activities available to us.
+          </p>
+        </div>
+
+        <div class="reading-actions">
+          <button class="btn btn-accent btn-large" id="done-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            I'm Done Reading
+          </button>
+          <p class="hint">Read at your normal, comfortable pace</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="section results-section" id="results-section" style="display: none;">
+      <div class="card results-card">
+        <div class="results-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <h2>Calibration Complete!</h2>
+        
+        <div class="results-stats">
+          <div class="stat-card primary">
+            <div class="stat-value" id="result-wpm">--</div>
+            <div class="stat-label">Words per Minute</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="result-time">--</div>
+            <div class="stat-label">Time Taken</div>
+          </div>
+        </div>
+
+        <div class="comparison">
+          <h3>How do you compare?</h3>
+          <div class="comparison-bar">
+            <div class="comparison-marker slow">Slow<br>150</div>
+            <div class="comparison-marker average">Average<br>238</div>
+            <div class="comparison-marker fast">Fast<br>400</div>
+            <div class="comparison-indicator" id="comparison-indicator"></div>
+          </div>
+          <p class="comparison-text" id="comparison-text"></p>
+        </div>
+
+        <div class="results-actions">
+          <button class="btn btn-primary" id="save-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            Save My Reading Speed
+          </button>
+          <button class="btn btn-secondary" id="retry-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+            Try Again
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Success Section -->
+    <section class="section success-section" id="success-section" style="display: none;">
+      <div class="card success-card">
+        <div class="success-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <h2>You're All Set!</h2>
+        <p>Your reading speed of <strong id="final-wpm">--</strong> words per minute has been saved.</p>
+        <p class="success-hint">Reading time estimates will now be personalized just for you.</p>
+        <button class="btn btn-primary" id="close-btn">Close This Tab</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="calibration.js" type="module"></script>
+</body>
+</html>
+

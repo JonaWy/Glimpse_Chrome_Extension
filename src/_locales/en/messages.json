@@ -1,0 +1,53 @@
+{
+  "extension_name": {
+    "message": "Glimpse - Reading Enhancement",
+    "description": "The name of the extension"
+  },
+  "extension_description": {
+    "message": "Enhance your reading experience with personalized reading time estimates, focus mode, and reading statistics.",
+    "description": "The description of the extension"
+  },
+  "reading_time": {
+    "message": "$TIME$ min read",
+    "description": "Reading time display",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "reading_time_short": {
+    "message": "$TIME$ min",
+    "description": "Short reading time display",
+    "placeholders": {
+      "time": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "words": {
+    "message": "$COUNT$ words",
+    "description": "Word count display",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "1500"
+      }
+    }
+  },
+  "calibrate": {
+    "message": "Calibrate Reading Speed",
+    "description": "Button to start calibration"
+  },
+  "settings": {
+    "message": "Settings",
+    "description": "Settings button text"
+  },
+  "statistics": {
+    "message": "Statistics",
+    "description": "Statistics section title"
+  }
+}
+
